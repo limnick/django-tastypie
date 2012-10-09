@@ -394,7 +394,7 @@ class RelatedField(ApiField):
     self_referential = False
     help_text = 'A related resource. Can be either a URI or set of nested resource data.'
 
-    def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED, null=False, blank=False, readonly=False, full=False, unique=False, help_text=None, is_recursive=False, max_depth=1):
+    def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED, null=False, blank=False, readonly=False, full=False, unique=False, help_text=None, max_depth=1):
         """
         Builds the field and prepares it to access to related data.
 
@@ -444,7 +444,6 @@ class RelatedField(ApiField):
         self.resource_name = None
         self.unique = unique
         self._to_class = None
-        self.is_recursive = is_recursive
         self.max_depth = max_depth
 
         if self.to == 'self':
@@ -622,11 +621,11 @@ class ToOneField(RelatedField):
 
     def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED,
                  null=False, blank=False, readonly=False, full=False,
-                 unique=False, help_text=None, is_recursive=False, max_depth=1):
+                 unique=False, help_text=None, max_depth=1):
         super(ToOneField, self).__init__(
             to, attribute, related_name=related_name, default=default,
             null=null, blank=blank, readonly=readonly, full=full,
-            unique=unique, help_text=help_text, is_recursive=is_recursive, max_depth=max_depth
+            unique=unique, help_text=help_text, max_depth=max_depth
         )
         self.fk_resource = None
 
@@ -695,11 +694,11 @@ class ToManyField(RelatedField):
 
     def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED,
                  null=False, blank=False, readonly=False, full=False,
-                 unique=False, help_text=None, is_recursive=False, max_depth=1):
+                 unique=False, help_text=None, max_depth=1):
         super(ToManyField, self).__init__(
             to, attribute, related_name=related_name, default=default,
             null=null, blank=blank, readonly=readonly, full=full,
-            unique=unique, help_text=help_text, is_recursive=is_recursive, max_depth=max_depth
+            unique=unique, help_text=help_text, max_depth=max_depth
         )
         self.m2m_bundles = []
 
