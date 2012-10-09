@@ -513,10 +513,10 @@ class RelatedField(ApiField):
         from ``full_dehydrate`` for the related resource.
         """
         depth = getattr(bundle, 'depth', 0)
-        if not self.full:
+        if not self.full or depth >= self.max_depth:
             # Be a good netizen.
             return related_resource.get_resource_uri(bundle)
-        elif depth < self.max_depth:
+        else:
             # ZOMG extra data and big payloads.
             bundle = related_resource.build_bundle(obj=related_resource.instance, request=bundle.request)
             bundle.depth = depth
