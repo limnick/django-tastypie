@@ -1,9 +1,11 @@
 import time
+import re
 from urlparse import urlparse
 from django.conf import settings
 from django.test import TestCase
 from django.test.client import FakePayload, Client
 from tastypie.serializers import Serializer
+from django.utils.encoding import smart_str
 
 
 class TestApiClient(object):
@@ -161,6 +163,14 @@ class TestApiClient(object):
 
         if data is not None:
             kwargs['data'] = self.serializer.serialize(data, format=content_type)
+            # Encode the content so that the byte representation is correct.
+            CONTENT_TYPE_RE = re.compile('.*; charset=([\w\d-]+);?')
+            match = CONTENT_TYPE_RE.match(content_type)
+            if match:
+                charset = match.group(1)
+            else:
+                charset = settings.DEFAULT_CHARSET
+            kwargs['data'] = smart_str(kwargs['data'], encoding=charset)
 
         if authentication is not None:
             kwargs['HTTP_AUTHORIZATION'] = authentication
